@@ -1,0 +1,38 @@
+{
+  "name": "grossberger-georg/php-dev-tools",
+  "description": "Common tools for PHP projects",
+  "type": "library",
+  "license": "Apache-2.0",
+  "config": {
+    "bin-dir": "bin/"
+  },
+  "authors": [
+    {
+      "name": "Georg Großberger",
+      "email": "contact@grossberger-ge.org"
+    }
+  ],
+  "require": {
+    "phpunit/phpunit": "^6.0",
+    "friendsofphp/php-cs-fixer": "^2.5"
+  },
+  "require-dev": {
+    "typo3/cms": "^8.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "GrossbergerGeorg\\PHPDevTools\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "GrossbergerGeorg\\PHPDevTools\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "vendor/typo3/cms/",
+      "prepare-web-dir": false
+    }
+  }
+}
