@@ -15,6 +15,7 @@ namespace GrossbergerGeorg\PHPDevTools\Testing;
 
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Setup TYPO3 related information before running a test
@@ -61,5 +62,17 @@ abstract class TYPO3TestCase extends AbstractTestCase
             $ctx = new ApplicationContext(getenv('TYPO3_CONTEXT') ?: 'Testing');
             GeneralUtility::presetApplicationContext($ctx);
         }
+    }
+
+    /**
+     * @param array $returnMap
+     * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker|ObjectManager
+     */
+    protected function mockObjectManager(array $returnMap = [])
+    {
+        return $this->makeMock(ObjectManager::class)
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnMap($returnMap);
     }
 }
