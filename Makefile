@@ -11,12 +11,9 @@ fix: vendor/autoload.php
 	@php bin/php-cs-fixer fix --config=.php_cs
 
 clean:
-	@rm -rf vendor
+	@rm -rf vendor bin
 
-clobber: clean
-	@rm -rf bin
-
-.PHONY: build test clean clobber
+.PHONY: build test clean
 
 vendor/autoload.php: bin/composer
 	@php bin/composer install
