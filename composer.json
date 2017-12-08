@@ -13,8 +13,8 @@
     }
   ],
   "require": {
-    "phpunit/phpunit": "^6.0",
-    "friendsofphp/php-cs-fixer": "^2.5"
+    "phpunit/phpunit": "^6.5",
+    "friendsofphp/php-cs-fixer": "^2.9"
   },
   "require-dev": {
     "typo3/cms": "^8.7"
@@ -31,7 +31,7 @@
   },
   "extra": {
     "typo3/cms": {
-      "cms-package-dir": "vendor/typo3/cms/",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "prepare-web-dir": false
     }
   }
