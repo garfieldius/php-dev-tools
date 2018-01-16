@@ -4,7 +4,10 @@
   "type": "library",
   "license": "Apache-2.0",
   "config": {
-    "bin-dir": "bin/"
+    "bin-dir": "bin/",
+    "plaform": {
+      "php": "7.0.8"
+    }
   },
   "authors": [
     {
@@ -13,11 +16,13 @@
     }
   ],
   "require": {
+    "php": ">=7.0",
     "phpunit/phpunit": "^6.5",
-    "friendsofphp/php-cs-fixer": "^2.9"
+    "friendsofphp/php-cs-fixer": "^2.10"
   },
   "require-dev": {
-    "typo3/cms": "^8.7"
+    "typo3/cms-core": ">=8.7",
+    "typo3/cms-extbase": ">=8.7"
   },
   "autoload": {
     "psr-4": {
@@ -32,7 +37,7 @@
   "extra": {
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "prepare-web-dir": false
+      "web-dir": ".install/"
     }
   }
 }
