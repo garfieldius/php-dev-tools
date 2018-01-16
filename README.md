@@ -24,9 +24,10 @@ The class `TYPO3TestCase` extends `AbstractTestCase` and contains the static met
 There are three fixers for [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
 
 1. `GrossbergerGeorg/lower_header_comment` works like the default HeaderComment fixer, except it puts the header after the namespace declaration.
+    It also does not update the header, if it is the same, but with a different year, given the template contains the marker `__YEAR__` instead of an actual year. This is useful for not updating every file in a project after every new years eve.
 2. `GrossbergerGeorg/namespace_first` ensures that the namespace declaration is the first statement in a PHP file, even before any comment.
 3. `GrossbergerGeorg/single_empty_line` ensures there are only single empty lines between statements.
 
 ## License
 
-Released under Apache License 2.0, please see [LICENSE](LICENSE) or <https://www.apache.org/licenses/LICENSE-2.0> for details.
+Released under Apache License 2.0, please see the file [LICENSE](LICENSE) of this package or <https://www.apache.org/licenses/LICENSE-2.0> for details.

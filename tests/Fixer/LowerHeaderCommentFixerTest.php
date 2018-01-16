@@ -84,4 +84,42 @@ EOF;
             'HeaderCommentFixer changed the output after successful first run with ' . $name
         );
     }
+
+    public function testCopyrightYearIsNotChangedIfHeaderIsValid()
+    {
+        $header = <<<EOF
+            This file is (c) __YEAR__ by Someone
+
+            It is free software; you can redistribute it and/or
+            modify it under the terms of the Apache License 2.0
+
+            For the full copyright and license information see
+            <http://www.apache.org/licenses/LICENSE-2.0>
+EOF;
+
+        LowerHeaderCommentFixer::setHeader($header);
+        $existingHeader = str_replace(date('Y'), '3000', LowerHeaderCommentFixer::getFullHeader());
+
+        $php = <<<EOF
+<?php
+
+${existingHeader}
+
+function someFunc() {
+    echo 'Hello';
+}
+
+EOF;
+
+        $php = ltrim($php);
+
+        $fixer = new LowerHeaderCommentFixer();
+        $file = $this->getMockBuilder(\SplFileInfo::class)->disableOriginalConstructor()->getMock();
+
+        $expected = Tokens::fromCode($php);
+        $actual = clone $expected;
+
+        $fixer->fix($file, $actual);
+        $this->assertSame($expected->generateCode(), $actual->generateCode());
+    }
 }

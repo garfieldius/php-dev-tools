@@ -1,4 +1,5 @@
-<?php namespace GrossbergerGeorg\PHPDevTools\Fixer;
+<?php
+namespace GrossbergerGeorg\PHPDevTools\Fixer;
 
 /*
  * This file is (c) 2017 by Georg Großberger
@@ -23,12 +24,16 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 class LowerHeaderCommentFixer extends BaseFixer
 {
+    const YEAR_MARKER = '__YEAR__';
+
     private static $headerComment = '';
+
+    private static $testComment = '';
 
     /**
      * Set the header to use for PHP files
      *
-     * Must not containt the comment tokens /* or //
+     * Just the text of the header, must not containt the comment tokens /* or //
      *
      * @param string $header
      */
@@ -45,6 +50,17 @@ class LowerHeaderCommentFixer extends BaseFixer
 
             self::$headerComment .= ' */';
         }
+
+        if (stripos(self::$headerComment, self::YEAR_MARKER) !== false) {
+            self::$testComment = '/' . preg_quote(self::$headerComment, '/') . '/';
+            self::$testComment = str_replace(self::YEAR_MARKER, '[0-9]{4}', self::$testComment);
+            self::$headerComment = str_replace(self::YEAR_MARKER, date('Y'), self::$headerComment);
+        }
+    }
+
+    public static function getFullHeader()
+    {
+        return self::$headerComment;
     }
 
     /**
@@ -61,11 +77,12 @@ class LowerHeaderCommentFixer extends BaseFixer
     public function fix(\SplFileInfo $file, Tokens $tokens)
     {
         $index = 1;
-        $hasNs = false;
+        $hasCodeBefore = false;
+        $clearIndexes = [];
 
         for ($i = 1; $i < $tokens->count(); $i++) {
-            if ($tokens[$i]->isGivenKind(T_NAMESPACE)) {
-                $hasNs = true;
+            if ($tokens[$i]->isGivenKind(T_NAMESPACE) || $tokens[$i]->isGivenKind(T_DECLARE)) {
+                $hasCodeBefore = true;
 
                 while ($tokens[$i]->getContent() !== ';') {
                     $i++;
@@ -74,12 +91,21 @@ class LowerHeaderCommentFixer extends BaseFixer
                 $index = $i + 1;
             } elseif (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isGivenKind(T_COMMENT)) {
                 break;
+            } elseif (self::$testComment && $tokens[$i]->isComment()) {
+                if (preg_match(self::$testComment, $tokens[$i]->getContent())) {
+                    return;
+                }
             }
+
+            $clearIndexes[] = $i;
+        }
+
+        foreach ($clearIndexes as $i) {
             $tokens[$i] = new Token('');
         }
 
         $tokens->insertAt($index, [
-            new Token([T_WHITESPACE, "\n" . ($hasNs ? "\n" : '')]),
+            new Token([T_WHITESPACE, "\n" . ($hasCodeBefore ? "\n" : '')]),
             new Token([T_COMMENT, self::$headerComment]),
             new Token([T_WHITESPACE, "\n\n"])
         ]);
