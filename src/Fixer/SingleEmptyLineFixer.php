@@ -1,7 +1,8 @@
-<?php namespace GrossbergerGeorg\PHPDevTools\Fixer;
+<?php
+namespace GrossbergerGeorg\PHPDevTools\Fixer;
 
 /*
- * This file is (c) 2017 by Georg Großberger
+ * This file is (c) 2018 by Georg Großberger
  * <contact@grossberger-ge.org> - <https://grossberger-ge.org/>
  *
  * It is free software; you can redistribute it and/or
