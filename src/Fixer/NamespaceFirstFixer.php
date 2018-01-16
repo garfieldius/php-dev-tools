@@ -44,6 +44,7 @@ class NamespaceFirstFixer extends BaseFixer
 
         if (is_array($namespace)) {
             $tokens->insertAt(1, $namespace);
+            $tokens[0] = new Token([T_OPEN_TAG, "<?php\n"]);
         }
     }
 }
