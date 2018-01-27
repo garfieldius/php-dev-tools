@@ -30,7 +30,7 @@ class NamespaceFirstFixerTest extends TestCase
     public function namespaceDataProvider()
     {
         $result = [];
-        $sets = ['NamespaceAfterComment', 'NamespaceFirst', 'NamespaceNoClass', 'MissingNewline'];
+        $sets = ['NamespaceAfterComment', 'NamespaceFirst', 'NamespaceNoClass', 'MissingNewline', 'DeclareWithComment'];
         $dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
                   'Fixtures' . DIRECTORY_SEPARATOR . 'NamespaceFixer' . DIRECTORY_SEPARATOR;
 

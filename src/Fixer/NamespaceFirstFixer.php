@@ -26,25 +26,48 @@ class NamespaceFirstFixer extends BaseFixer
     public function fix(\SplFileInfo $file, Tokens $tokens)
     {
         $namespace = null;
-        $prev = null;
+        $insertAt = 1;
+        $replaces = [];
 
-        foreach ($tokens as $i => $token) {
-            if ($token->isGivenKind(T_NAMESPACE)) {
-                $namespace = [$token];
-                $tokens[$i] = new Token('');
+        for ($i = 0; $i < count($tokens); $i++) {
+            if ($tokens[$i]->isGivenKind(T_DECLARE)) {
+                while ($tokens[$i++]->getContent() !== ';') {
+                    $insertAt = $i + 1;
+                }
+
+                if ($tokens[$i]->getContent() === "\n") {
+                    $insertAt++;
+                }
+            } elseif ($tokens[$i]->isGivenKind(T_NAMESPACE)) {
+                $namespace = [new Token([T_NAMESPACE, 'namespace'])];
+                $replaces[] = $i;
             } elseif (is_array($namespace)) {
-                $namespace[] = $token;
-                $tokens[$i] = new Token('');
+                $namespace[] = $tokens[$i];
+                $replaces[] = $i;
 
-                if (trim($token->getContent()) === ';') {
+                if ($tokens[$i]->getContent() === ';') {
                     break;
                 }
             }
         }
 
-        if (is_array($namespace)) {
-            $tokens->insertAt(1, $namespace);
+        if ($insertAt === 1) {
             $tokens[0] = new Token([T_OPEN_TAG, "<?php\n"]);
+        }
+
+        if (is_array($namespace)) {
+            foreach ($replaces as $i) {
+                $tokens[$i] = new Token('');
+            }
+
+            $tokens->clearEmptyTokens();
+            $tokens->insertAt($insertAt, $namespace);
+
+            $prev = $tokens[$insertAt - 1]->getContent();
+
+            if (strpos($prev, "\n") === false && $insertAt > 1) {
+                $tokens->insertAt($insertAt, [new Token([T_WHITESPACE, "\n"])]);
+            }
         }
     }
 }
