@@ -1,0 +1,29 @@
+<?php
+declare(strict_types=1);
+
+
+
+
+namespace My\Ns;
+
+/*
+ * This file is (c) 3000 by Someone
+ *
+ * It is free software; you can redistribute it and/or
+ * modify it under the terms of the Apache License 2.0
+ *
+ * For the full copyright and license information see
+ * <http://www.apache.org/licenses/LICENSE-2.0>
+ */
+
+use \SplFixedArray;
+
+
+
+
+/**
+ * Some doc block
+ */
+class Collection extends SplFixedArray
+{
+}

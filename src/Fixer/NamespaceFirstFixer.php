@@ -31,11 +31,21 @@ class NamespaceFirstFixer extends BaseFixer
 
         for ($i = 0; $i < count($tokens); $i++) {
             if ($tokens[$i]->isGivenKind(T_DECLARE)) {
-                while ($tokens[$i++]->getContent() !== ';') {
-                    $insertAt = $i + 1;
+                while (true) {
+                    if ($i > count($tokens)) {
+                        return;
+                    }
+
+                    $i++;
+                    $insertAt = $i;
+
+                    if ($tokens[$i - 1]->getContent() === ';') {
+                        $i--;
+                        break;
+                    }
                 }
 
-                if ($tokens[$i]->getContent() === "\n") {
+                if ($tokens[$i + 1]->getContent() === "\n") {
                     $insertAt++;
                 }
             } elseif ($tokens[$i]->isGivenKind(T_NAMESPACE)) {

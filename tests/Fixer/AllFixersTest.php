@@ -30,13 +30,13 @@ class AllFixersTest extends TestCase
     {
         $variations = ['', 'NoNs'];
         $res = [];
+        $dir = __DIR__ . '/../Fixtures/Combined/';
 
         foreach ($variations as $variation) {
             $sets = [
                 'WrongOrder' . $variation,
                 'NoComment' . $variation
             ];
-            $dir = __DIR__ . '/../Fixtures/Combined/';
             $exp = file_get_contents($dir . 'Expected' . $variation . '.php');
 
             foreach ($sets as $set) {
@@ -47,6 +47,12 @@ class AllFixersTest extends TestCase
                 ];
             }
         }
+
+        $res[] = [
+            file_get_contents($dir . 'DeclareSrc.php'),
+            file_get_contents($dir . 'DeclareExpected.php'),
+            'Declare'
+        ];
 
         return $res;
     }
