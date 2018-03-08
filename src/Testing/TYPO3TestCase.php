@@ -66,13 +66,16 @@ abstract class TYPO3TestCase extends AbstractTestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker|ObjectManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
      */
     protected function mockObjectManager(array $returnMap = [])
     {
-        return $this->makeMock(ObjectManager::class)
+        $objectManager = $this->makeMock(ObjectManager::class);
+        $objectManager
             ->expects($this->any())
             ->method('get')
             ->willReturnMap($returnMap);
+
+        return $objectManager;
     }
 }
